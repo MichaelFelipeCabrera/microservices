@@ -1,11 +1,14 @@
 ﻿using RestWithASPNETUdemy.Model;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
+        private volatile int count;
+
         public Person Create(Person person)
         {
             return person;
@@ -13,9 +16,8 @@ namespace RestWithASPNETUdemy.Services.Implementations
 
         public void Delete(long id)
         {
-            throw new System.NotImplementedException();
-        }
 
+        }
         public List<Person> FindAll()
         {
             List<Person> persons = new List<Person>();
@@ -27,17 +29,11 @@ namespace RestWithASPNETUdemy.Services.Implementations
             return persons;
         }
 
-        private Person MockPerson(int i)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public Person FindByID(long id)
         {
             return new Person()
             {
-                Id = 1,
+                Id = IncrementAndGet(),
                 FirstName = "Leandro",
                 LastName = "Costa",
                 Address = "Uberaldia - Minas Gerais - Brasil",
@@ -45,25 +41,33 @@ namespace RestWithASPNETUdemy.Services.Implementations
 
             };
         }
+
         public Person Update(Person person)
         {
-            throw new System.NotImplementedException();
+            return person;
+        }
+
+
+        private Person MockPerson(int i)
+        {
+            return new Person
+            {
+                Id = IncrementAndGet(),
+                FirstName = "Person Name"+i,
+                LastName = "Person LastName" + i,
+                Address = "Some Adress" + i,
+                Gender = "Male" + i
+            };
+        }
+
+        private long IncrementAndGet()
+        {
+            return Interlocked.Increment(ref count);
         }
 
 
 
-    }
-    //private static Person MockPerson(int i)
-    //{
-    //    return new Person
-    //    {
-    //        Id = i,
-    //        FirstName = "Leandro",
-    //        LastName = "Costa",
-    //        Address = "Uberaldia - Minas Gerais - Brasil",
-    //        Gender = "Male"
 
-    //    };
-    //}
+    }
 }
 
